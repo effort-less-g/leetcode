@@ -11,19 +11,29 @@ class Solution:
         '9': ['w', 'x', 'y', 'z']
     }
 
-    def bt_dfs(self, path, length):
+    ans = []
+    digits = ""
+
+    def bt_dfs(self, path, digit, length):
+        print(digit)
 
         if len(path) == length:
             return path
 
-        for digit in digits:
-            for choice in combos[digit]:
-                path += choice
-                return self.bt_dfs(path, len(path))
-                path.pop()
+        for choice in self.combos[digit]:
+            path += choice
+            ind = len(path)
+            if len(path) == length:
+                ind -= 1
+            res = self.bt_dfs(path, self.digits[ind], length)
+            if res:
+                self.ans.append(res)
+            path = path[:-1]
 
     def letterCombinations(self, digits: str) -> List[str]:
 
         path = ""
-        self.bt_dfs(path, len(path))
-
+        self.ans = []
+        self.digits = digits
+        self.bt_dfs(path, digits[0], len(digits))
+        return self.ans
